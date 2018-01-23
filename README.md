@@ -13,10 +13,7 @@ This README document is under work in progress.
 
 * Summary of set up
 
-* Configuration
-    Devices used for automation – iPhone8 (ios11), iPhone6 (ios10.3.3), Android Note4 (6.0.1)and Samsung Galaxy8 (7.0)
-
-* Dependencies (Tools and Technologies used)
+* Configuration and Dependencies (Tools and Technologies used)
 - Appium 1.7.1 – Mobile automation tool 
 - Android SDK
 - Java – Scripting language
@@ -24,6 +21,7 @@ This README document is under work in progress.
 - TestNG  6.11 – Unit Testing tool
 - Maven  3.3.9 –  Project  management tool
 - Eclipse – IDE tool  (Any other IDE such as intellij can also be used)
+- Devices used for automation – iPhone8 (ios11), iPhone6 (ios10.3.3), Android Note4 (6.0.1)and Samsung Galaxy8 (7.0)
 
 * Database configuration - N/A
 * How to run tests - #To be added [Currently working on creating separate java classes that will pick platform's desired capabilities at run time]
