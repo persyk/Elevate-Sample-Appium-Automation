@@ -28,10 +28,12 @@ This README document is under work in progress.
 ### How to run Tests ###
 * Run tests on Android device:
 1. Set the value of ‘executeOnPlatform’ parameter to  "android" in ‘DesiredCapabilitiesPage’ [Stored at Elevate/src/main/java/com/elevate/desired_capabilities]
+
 2. Set the capabilities i.e  appPath, deviceName, platformVersion, appPackage, platformName, appActivity, appWaitActivity in  "AndroidCapabilitiesPage"
 
 * Run tests on iOS device:
 1. Set the value of ‘executeOnPlatform’ parameter to  "ios" in ‘DesiredCapabilitiesPage’. [Stored at Elevate/src/main/java/com/elevate/desired_capabilities]
+
 2. Set the capabilities i.e  appPath, deviceName, platformVersion, bundleId, platformName, appActivity, appWaitActivity, device UDID in  "iOSCapabilitiesPage"
 
 * Set the 'username' and 'password' values in BaseDriver file in 'applyPropertiesMethod' [Stored at Elevate/src/main/java/com/elevate/driver/webdriver]
