@@ -11,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public abstract class BasePage extends DriverFactory implements Page {
 
 	protected static final long DELAY_BETWEEN_ELEMENT_CHECKS_IN_MS = 250L;
+
 	private final Properties resources;
 	public ExpectedCondition<Boolean> isPageLoadedCondition;
 	private static int currentPageLoadTimeOutInSecondsDefault = -1;
@@ -51,8 +52,7 @@ public abstract class BasePage extends DriverFactory implements Page {
 		Map<String, String> env = System.getenv();
 		int loadedDefaultPageLoadTimeout;
 		if (env.containsKey("TEST_DEFAULT_PAGE_TIME_OUT_IN_SEC")) {
-			loadedDefaultPageLoadTimeout = Integer
-					.parseInt((String) env.get("TEST_DEFAULT_PAGE_TIME_OUT_IN_SEC"));
+			loadedDefaultPageLoadTimeout = Integer.parseInt(env.get("TEST_DEFAULT_PAGE_TIME_OUT_IN_SEC"));
 		} else {
 			loadedDefaultPageLoadTimeout = 5;
 		}
@@ -63,6 +63,7 @@ public abstract class BasePage extends DriverFactory implements Page {
 
 	protected abstract String getExpectedTitle();
 
+	@Override
 	public Properties getResources() {
 		return this.resources;
 	}

@@ -15,7 +15,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -51,9 +50,9 @@ public class DriverFactory extends Loader {
 		return true;
 	}
 
-//	protected Logger getLogger() {
-//		return Logger.getLogger(getClass().toString());
-//	}
+	// protected Logger getLogger() {
+	// return Logger.getLogger(getClass().toString());
+	// }
 
 	public void sleep(long waitTimeInMS, String reason) {
 		if (reason == null) {
@@ -282,7 +281,7 @@ public class DriverFactory extends Loader {
 		WebDriver popup = null;
 		Iterator<String> ite = getDriver().getWindowHandles().iterator();
 		while (ite.hasNext()) {
-			popup = getDriver().switchTo().window(((String) ite.next()).toString());
+			popup = getDriver().switchTo().window(ite.next().toString());
 			if (popup.getCurrentUrl().contains(url)) {
 				getLogger().info("The url of the current pop up is : " + popup.getCurrentUrl().toString());
 				getLogger().info("PopUp is now focussed");
@@ -296,7 +295,7 @@ public class DriverFactory extends Loader {
 		boolean found = false;
 		Iterator<String> ite = getDriver().getWindowHandles().iterator();
 		while (ite.hasNext()) {
-			popup = getDriver().switchTo().window(((String) ite.next()).toString());
+			popup = getDriver().switchTo().window(ite.next().toString());
 			if (popup.getTitle().contains(title)) {
 				getLogger().info("The title of the current pop up is : " + popup.getTitle());
 				getLogger().info("PopUp is now focussed");
@@ -313,7 +312,7 @@ public class DriverFactory extends Loader {
 		WebDriver childWindow = null;
 		Iterator<String> ite = getDriver().getWindowHandles().iterator();
 		while (ite.hasNext()) {
-			childWindow = getDriver().switchTo().window(((String) ite.next()).toString());
+			childWindow = getDriver().switchTo().window(ite.next().toString());
 			getLogger().info("The title of the current pop up is : " + childWindow.getTitle());
 			getLogger().info("PopUp is now focussed");
 		}
@@ -361,7 +360,7 @@ public class DriverFactory extends Loader {
 		WebDriver popup = null;
 		Iterator<String> ite = getDriver().getWindowHandles().iterator();
 		while (ite.hasNext()) {
-			popup = getDriver().switchTo().window(((String) ite.next()).toString());
+			popup = getDriver().switchTo().window(ite.next().toString());
 			String hwnd = popup.getWindowHandle();
 			if (!hwnd.equalsIgnoreCase(mwh)) {
 				getLogger().info("The title of the current pop up is : " + popup.getTitle());
@@ -412,7 +411,7 @@ public class DriverFactory extends Loader {
 		Iterator<String> handlesIterator = windowHandles.iterator();
 		String handle;
 		do {
-			handle = (String) handlesIterator.next();
+			handle = handlesIterator.next();
 		} while (handlesIterator.hasNext());
 		return handle;
 	}
@@ -575,7 +574,7 @@ public class DriverFactory extends Loader {
 			throw new RuntimeException("Expected length is smaller than the actual length");
 		}
 		for (int i = 1; i < expOptions.length; i++) {
-			if (!expOptions[i].contentEquals(((WebElement) actOptions.get(i)).getText().trim())) {
+			if (!expOptions[i].contentEquals(actOptions.get(i).getText().trim())) {
 				found = false;
 			}
 		}
@@ -589,12 +588,10 @@ public class DriverFactory extends Loader {
 		executeScript(javascript);
 		getLogger().info("executed drag-n-drop action via javascript");
 	}
-	
-	
-	public void swipe(int start_x, int start_y, int end_x, int end_y)
-	{
-		 TouchAction ta = new TouchAction((AppiumDriver<WebElement>) getDriver());
-		 ta.press(start_x, start_y).moveTo(end_x, end_y).release().perform();
+
+	public void swipe(int start_x, int start_y, int end_x, int end_y) {
+		TouchAction touchAction = new TouchAction((AppiumDriver<WebElement>) getDriver());
+		touchAction.press(start_x, start_y).moveTo(end_x, end_y).release().perform();
 	}
 
 	static class CannotOpenTabException extends RuntimeException {
@@ -631,7 +628,7 @@ public class DriverFactory extends Loader {
 		}
 		WebDriverWait wait = new WebDriverWait(getDriver(), timeOut);
 		long tStart = System.currentTimeMillis();
-		WebElement element = (WebElement) wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 		long tElapsed = System.currentTimeMillis() - tStart;
 		getLogger().info("the reason for wait: " + reason + " waited " + tElapsed + "ms");
 		return element;
@@ -643,7 +640,7 @@ public class DriverFactory extends Loader {
 		}
 		WebDriverWait wait = new WebDriverWait(getDriver(), timeOut);
 		long tStart = System.currentTimeMillis();
-		WebElement el = (WebElement) wait.until(ExpectedConditions.visibilityOf(element));
+		WebElement el = wait.until(ExpectedConditions.visibilityOf(element));
 		long tElapsed = System.currentTimeMillis() - tStart;
 		getLogger().info("the reason for wait: " + reason + " waited " + tElapsed + "ms");
 		return el;

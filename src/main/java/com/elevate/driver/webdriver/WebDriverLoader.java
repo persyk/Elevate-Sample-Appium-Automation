@@ -3,7 +3,6 @@ package com.elevate.driver.webdriver;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,7 +13,6 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
@@ -30,12 +28,13 @@ import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
-public class WebDriverLoader {
+import com.elevate.desired_capabilities.DesiredCapabilitiesPage;
+
+public class WebDriverLoader extends BaseDriver {
 
 	public static final int DEFAULT_TIMEOUT_IN_SECONDS = 15;
 	private static final Pattern PATTERN_DRIVER_TYPE_APPIUM_IOS = Pattern.compile("appium-(app|safari)-(ipad|iphone)");
 	private static final Pattern PATTERN_DRIVER_TYPE_APPIUM_ANDROID = Pattern.compile("appium-(app|browser)-android");
-
 	private static final Logger LOGGER = Logger.getLogger(WebDriverLoader.class);
 	public static final String ENV_VAR_NAME_TUNNEL_IDENTIFIER = "TUNNEL_IDENTIFIER";
 	private String testName;
@@ -55,46 +54,30 @@ public class WebDriverLoader {
 	private static final Random random = new Random(System.currentTimeMillis());
 	protected static final int HTTP_CONNECT_TIMEOUT_IN_SECONDS_FAIL_FAST = 5;
 	protected static final int HTTP_RESPONSE_TIMEOUT_IN_SECONDS_FAIL_FAST = 15;
-	
 	private String bundleid;
-	
 
 	public WebDriverLoader(Properties properties) {
-//		setSeleniumGridHub(properties.getProperty("selenium.grid.hub"));
-//		this.appPath = properties.getProperty("appPath");
-//		this.deviceName = properties.getProperty("deviceName");
-//		this.platformVersion = properties.getProperty("platformVersion");
-//		this.appPackage = properties.getProperty("appPackage");
-//		this.platformName = properties.getProperty("platformName");
-//		this.appActivity = properties.getProperty("appActivity");
-//		this.appWaitActivity = properties.getProperty("appWaitActivity");
-//		this.deviceUdid = properties.getProperty("deviceUdid");
-//		this.bundleid = properties.getProperty("appPackage");
-
+		
+		DesiredCapabilitiesPage desiredCapabilities = getDesiredCapabilitiesPage();
 		try {
-			this.seleniumGridHub = new URL("http://127.0.0.1:4723/wd/hub");
+			this.seleniumGridHub = new URL(desiredCapabilities.seleniumGridHub);
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-//		this.appPath = "src/resources/apk/app-dev-release_160.apk";
-//		this.deviceName = "Note 4";
-//		this.platformVersion = "6.0.1";
-//		this.appPackage = "com.convene.elevate.dev";
-//		this.platformName = "android";
-		this.appActivity = "com.convene.elevate.modules.splash.SplashScreenActivity";
-		this.appWaitActivity = "com.convene.elevate.modules.splash.SplashScreenActivity";
-		this.deviceUdid = "e1847c5eb114258488776b9e2a4bc1e1d136a4a2";		
-		this.unicodeKeyboard = true;
-		this.resetKeyboard = true;
-		
-		//iOS
-		this.appPath = "src/resources/iOS_ipaFile/Elevate_Dev_f.ipa";
-		this.deviceName = "iPhone 8";
-		this.platformVersion = "11.0";
-		this.platformName = "iOS";
-		this.bundleid = "com.convene.Elevate.dev";	
+		}		
+		this.appPath = desiredCapabilities.appPath;
+		this.deviceName = desiredCapabilities.deviceName;
+		this.platformVersion = desiredCapabilities.platformVersion;
+		this.appPackage = desiredCapabilities.appPackage;
+		this.platformName = desiredCapabilities.platformName;
+		this.appActivity = desiredCapabilities.appActivity;
+		this.appWaitActivity = desiredCapabilities.appWaitActivity;
+		this.unicodeKeyboard = desiredCapabilities.unicodeKeyboard;
+		this.resetKeyboard = desiredCapabilities.resetKeyboard;
 
+		// iOS
+		this.deviceUdid = desiredCapabilities.deviceUdid;
+		this.bundleid = desiredCapabilities.bundleId;
 		this.trackClientPerf = Boolean.valueOf(properties.getProperty("trackClientPerf")).booleanValue();
 	}
 
@@ -142,13 +125,19 @@ public class WebDriverLoader {
 										driver = loadLocalAndroidDriver();
 									} else {
 										if (isAppium_android(driverType)) {
-											driver = loadAppium_android(driverType, this.appPath, this.appName,
-													this.appPackage, this.appActivity);
+											driver = loadAppium_android(
+													driverType, this.appPath,
+													this.appName,
+													this.appPackage,
+													this.appActivity);
 										} else if (isAppium_iOS(driverType)) {
-											driver = loadAppium_iOS(driverType, this.appPath, this.appName);
+											driver = loadAppium_iOS(driverType,
+													this.appPath, this.appName);
 										} else {
 											throw new IllegalArgumentException(
-													"Sorry, " + driverType + " is not supported yet");
+													"Sorry, "
+															+ driverType
+															+ " is not supported yet");
 										}
 									}
 								}
@@ -166,43 +155,38 @@ public class WebDriverLoader {
 
 	private WebDriver loadLocalIphoneDriver() {
 		try {
-			
+
 			DesiredCapabilities caps = new DesiredCapabilities();
 			caps.setCapability(MobileCapabilityType.PLATFORM_NAME, platformName);
 			caps.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
-			caps.setCapability(MobileCapabilityType.PLATFORM_VERSION, platformVersion);
+			caps.setCapability(MobileCapabilityType.PLATFORM_VERSION,platformVersion);
 			caps.setCapability("unicodeKeyboard", true);
 			caps.setCapability("resetKeyboard", true);
-			
+
 			// Package name
-			File f = new File(appPath);	
-			caps.setCapability(MobileCapabilityType.APP,f.getAbsolutePath());
-			
+			File f = new File(appPath);
+			caps.setCapability(MobileCapabilityType.APP, f.getAbsolutePath());
+
 			// App activity of the Application
 			caps.setCapability("appActivity", appActivity);
 			caps.setCapability("appWaitActivity", appWaitActivity);
-			
-			//new
-			caps.setCapability(MobileCapabilityType.UDID,deviceUdid);
-			caps.setCapability("bundleId", bundleid);// App activity of the Application
+			caps.setCapability(MobileCapabilityType.UDID, deviceUdid);
+			caps.setCapability("bundleId", bundleid);
 			caps.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
 			caps.setCapability("xcodeOrgId", "T8N3W6MR79");
 			caps.setCapability("xcodeSigningId", "iPhone Developer");
-//			caps.setCapability("waitForAppScript", "$.delay(1000);");
-//			caps.setCapability("autoDismissAlerts", true);
-			
-							
-			return new AppiumDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
-			//return new RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), caps);
-			//return new RemoteWebDriver(new URL("http://localhost:4723/wd/hub"), DesiredCapabilities.iphone());
-			
+			// caps.setCapability("waitForAppScript", "$.delay(1000);");
+			// caps.setCapability("autoDismissAlerts", true);
+
+			return new IOSDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
+
 		} catch (MalformedURLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	private boolean isLocalIphone(String driverType) {
-		return "iphone".equals(driverType);
+		return "ios".equals(driverType);
 	}
 
 	private WebDriver loadDefaultRemoteDriver() {
@@ -210,13 +194,13 @@ public class WebDriverLoader {
 	}
 
 	private String getSauceLabsHubLocation() {
-		return System.getProperty("selenium.grid.2.hub",
-				"http://<<-------------------------------->>@ondemand.saucelabs.com:80/wd/hub");
+		return System.getProperty("selenium.grid.2.hub","http://<<-------------------------------->>@ondemand.saucelabs.com:80/wd/hub");
 	}
 
 	private WebDriver loadRemoteDriverFirefox() {
 		try {
-			RemoteWebDriver remoteWebDriver = new RemoteWebDriver(this.seleniumGridHub, loadFirefoxCapabilities());
+			RemoteWebDriver remoteWebDriver = new RemoteWebDriver(
+					this.seleniumGridHub, loadFirefoxCapabilities());
 			return enhanceRemoteWebDriver(remoteWebDriver);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -243,11 +227,14 @@ public class WebDriverLoader {
 		capabilities.setCapability("acceptSslCerts", true);
 
 		try {
-			capabilities.setCapability("firefox_profile", createFirefoxProfile(this.trackClientPerf).toJson());
+			capabilities.setCapability("firefox_profile",
+					createFirefoxProfile(this.trackClientPerf).toJson());
 			if (isWindows64Bit())
-				System.setProperty("webdriver.gecko.driver", "src/resources/bin/x64/win/geckodriver.exe");
+				System.setProperty("webdriver.gecko.driver",
+						"src/resources/bin/x64/win/geckodriver.exe");
 			else
-				System.setProperty("webdriver.gecko.driver", "src/resources/bin/x32/win/geckodriver.exe");
+				System.setProperty("webdriver.gecko.driver",
+						"src/resources/bin/x32/win/geckodriver.exe");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -290,14 +277,16 @@ public class WebDriverLoader {
 
 	static void addYSlowExtension(FirefoxProfile profile) {
 		try {
-			File firebugExt = new File("src/resources/extensions/firefox/firebug-1.12.8.xpi");
+			File firebugExt = new File(
+					"src/resources/extensions/firefox/firebug-1.12.8.xpi");
 			profile.addExtension(firebugExt);
 			profile.setPreference("extensions.firebug.currentVersion", "1.12.7");
 			profile.setPreference("extensions.firebug.allPagesActivation", "on");
 			profile.setPreference("extensions.firebug.defaultPanelName", "net");
 			profile.setPreference("extensions.firebug.net.enableSites", true);
 
-			File yslowExt = new File("src/resources/extensions/firefox/yslow-3.1.8-fx.xpi");
+			File yslowExt = new File(
+					"src/resources/extensions/firefox/yslow-3.1.8-fx.xpi");
 			profile.addExtension(yslowExt);
 			profile.setPreference("extensions.yslow.autorun", true);
 			profile.setPreference("extensions.yslow.optinBeacon", true);
@@ -318,9 +307,11 @@ public class WebDriverLoader {
 		capab.setCapability("ignoreProtectedModeSettings", true);
 		try {
 			if (isWindows64Bit())
-				System.setProperty("webdriver.ie.driver", "src/resources/bin/x64/win/IEDriverServer.exe");
+				System.setProperty("webdriver.ie.driver",
+						"src/resources/bin/x64/win/IEDriverServer.exe");
 			else
-				System.setProperty("webdriver.ie.driver", "src/resources/bin/x32/win/IEDriverServer.exe");
+				System.setProperty("webdriver.ie.driver",
+						"src/resources/bin/x32/win/IEDriverServer.exe");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -332,20 +323,22 @@ public class WebDriverLoader {
 	}
 
 	private WebDriver loadChromeDriver() {
-		
+
 		ChromeOptions options = new ChromeOptions();
 		options.addArguments(new String[] { "disable-extensions" });
 		options.addArguments(new String[] { "ignore-certificate-errors" });
-		options.addArguments(new String[] { "--start-maximized"});
-		
+		options.addArguments(new String[] { "--start-maximized" });
+
 		DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 		capabilities.setCapability("chromeOptions", options);
 		System.setProperty("webdriver.gecko.verboseLogging", "false");
 		try {
 			if (isPlatformWindows())
-				System.setProperty("webdriver.chrome.driver", "src/resources/bin/x32/win/chromedriver.exe");
+				System.setProperty("webdriver.chrome.driver",
+						"src/resources/bin/x32/win/chromedriver.exe");
 			else if (isPlatformMAC())
-				System.setProperty("webdriver.chrome.driver", "src/resources/bin/macosx/chromedriver");
+				System.setProperty("webdriver.chrome.driver",
+						"src/resources/bin/macosx/chromedriver");
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -353,7 +346,8 @@ public class WebDriverLoader {
 	}
 
 	private boolean isPlatformWindows() {
-		return (System.getProperty("os.name").toLowerCase().startsWith("win".toLowerCase()));
+		return (System.getProperty("os.name").toLowerCase().startsWith("win"
+				.toLowerCase()));
 	}
 
 	private boolean isWindows64Bit() {
@@ -361,7 +355,8 @@ public class WebDriverLoader {
 	}
 
 	private boolean isPlatformMAC() {
-		return (System.getProperty("os.name").toLowerCase().startsWith("mac".toLowerCase()));
+		return (System.getProperty("os.name").toLowerCase().startsWith("mac"
+				.toLowerCase()));
 	}
 
 	private boolean isRemoteChrome(String driverType) {
@@ -374,7 +369,8 @@ public class WebDriverLoader {
 			options.addArguments(new String[] { "test-type" });
 			DesiredCapabilities capabilities = DesiredCapabilities.chrome();
 			capabilities.setCapability("chromeOptions", options);
-			RemoteWebDriver remoteWebDriver = new RemoteWebDriver(this.seleniumGridHub, capabilities);
+			RemoteWebDriver remoteWebDriver = new RemoteWebDriver(
+					this.seleniumGridHub, capabilities);
 			return enhanceRemoteWebDriver(remoteWebDriver);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
@@ -392,7 +388,8 @@ public class WebDriverLoader {
 		return new SafariDriver(capabilities);
 	}
 
-	private void setDefaultTimeout(WebDriver driver, int timeout, TimeUnit timeUnit) {
+	private void setDefaultTimeout(WebDriver driver, int timeout,
+			TimeUnit timeUnit) {
 		driver.manage().timeouts().implicitlyWait(timeout, timeUnit);
 	}
 
@@ -408,13 +405,16 @@ public class WebDriverLoader {
 		return PATTERN_DRIVER_TYPE_APPIUM_ANDROID.matcher(driverType).matches();
 	}
 
-	private WebDriver loadAppium_iOS(String driverType, String appPath, String appName) {
+	private WebDriver loadAppium_iOS(String driverType, String appPath,
+			String appName) {
 		LOGGER.debug("Appium version  with iOS version9.3");
-		DesiredCapabilities desiredCapabilities = createAppiumCapabilities_iOS(driverType, appPath, appName);
+		DesiredCapabilities desiredCapabilities = createAppiumCapabilities_iOS(
+				driverType, appPath, appName);
 		return new RemoteWebDriver(this.seleniumGridHub, desiredCapabilities);
 	}
 
-	static DesiredCapabilities createAppiumCapabilities_iOS(String driverType, String appPath, String appName) {
+	static DesiredCapabilities createAppiumCapabilities_iOS(String driverType,
+			String appPath, String appName) {
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 
 		String[] components = driverType.split("-");
@@ -424,7 +424,8 @@ public class WebDriverLoader {
 			if ("safari".equalsIgnoreCase(appComponent))
 				desiredCapabilities.setCapability("browserName", "safari");
 			else {
-				desiredCapabilities.setCapability("app", generateAppCapability(appPath, appName));
+				desiredCapabilities.setCapability("app",
+						generateAppCapability(appPath, appName));
 			}
 
 		}
@@ -439,8 +440,8 @@ public class WebDriverLoader {
 				if (deviceComponent.toLowerCase().equals("ipad"))
 					deviceName = "iPad 2";
 				else
-					throw new IllegalArgumentException(
-							"Unknown device " + deviceComponent + " in webdriver " + driverType);
+					throw new IllegalArgumentException("Unknown device "
+							+ deviceComponent + " in webdriver " + driverType);
 			}
 		}
 		desiredCapabilities.setCapability("platformName", "iOS");
@@ -455,9 +456,11 @@ public class WebDriverLoader {
 
 	private static String generateAppCapability(String appPath, String appName) {
 		if ((appName == null) || (appName.equals("")))
-			throw new IllegalArgumentException("appName not defined in defaultTest.properties or by mvn -D");
+			throw new IllegalArgumentException(
+					"appName not defined in defaultTest.properties or by mvn -D");
 		if ((appPath == null) || (appPath.equals(""))) {
-			throw new IllegalArgumentException("appPath not defined in defaultTest.properties or by mvn -D");
+			throw new IllegalArgumentException(
+					"appPath not defined in defaultTest.properties or by mvn -D");
 		}
 		String fileSeparator = System.getProperty("file.separator");
 		if (!(appPath.endsWith(fileSeparator))) {
@@ -466,13 +469,19 @@ public class WebDriverLoader {
 		return appPath + appName;
 	}
 
-	private WebDriver loadAppium_android(String driverType, String appPath, String appName, String appPackage, String appActivity) {
-		DesiredCapabilities desiredCapabilities = createAppiumCapabilities_Android(driverType, appPath, appName,appPackage, appActivity, unicodeKeyboard, resetKeyboard);
+	private WebDriver loadAppium_android(String driverType, String appPath,
+			String appName, String appPackage, String appActivity) {
+		DesiredCapabilities desiredCapabilities = createAppiumCapabilities_Android(
+				driverType, appPath, appName, appPackage, appActivity,
+				unicodeKeyboard, resetKeyboard);
 		return new RemoteWebDriver(this.seleniumGridHub, desiredCapabilities);
 	}
 
-	static DesiredCapabilities createAppiumCapabilities_Android(String driverType, String appPath, String appName, String appPackage, String appActivity, boolean unicodeKeyboard, boolean resetKeyboard) {
-		
+	static DesiredCapabilities createAppiumCapabilities_Android(
+			String driverType, String appPath, String appName,
+			String appPackage, String appActivity, boolean unicodeKeyboard,
+			boolean resetKeyboard) {
+
 		DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
 		String[] components = driverType.split("-");
 
@@ -484,7 +493,7 @@ public class WebDriverLoader {
 				desiredCapabilities.setCapability("app", generateAppCapability(appPath, appName));
 				desiredCapabilities.setCapability("appPackage", appPackage);
 				desiredCapabilities.setCapability("appActivity", appActivity);
-				
+
 			}
 		}
 
@@ -493,15 +502,18 @@ public class WebDriverLoader {
 			if ("android".equalsIgnoreCase(deviceComponent)) {
 				desiredCapabilities.setCapability("platformName", "Android");
 				desiredCapabilities.setCapability("platformVersion", "5.0.1");
-				desiredCapabilities.setCapability("deviceName", "4d00d41b85134057");
+				desiredCapabilities.setCapability("deviceName",
+						"4d00d41b85134057");
 			} else {
-				throw new IllegalArgumentException("Unknown device " + deviceComponent + " in webdriver " + driverType);
+				throw new IllegalArgumentException("Unknown device "
+						+ deviceComponent + " in webdriver " + driverType);
 			}
 		}
 		return desiredCapabilities;
 	}
 
-	static String getVersion(String platformComponent, String platform, String defaultVersion) {
+	static String getVersion(String platformComponent, String platform,
+			String defaultVersion) {
 		String platformVersion = platformComponent.substring(platform.length());
 		if (platformVersion.equals(""))
 			platformVersion = defaultVersion;
@@ -514,14 +526,17 @@ public class WebDriverLoader {
 
 	private WebDriver loadLocalAndroidDriver() {
 		try {
-		/*	DesiredCapabilities capabilities = new DesiredCapabilities();
-			capabilities.setCapability("deviceName", "LocalAndroid");
-			capabilities.setCapability("platformName", "android");
-			capabilities.setCapability("browserName", "browser");
-			capabilities.setCapability("platformVersion", "ANY");
-			capabilities.setCapability("autoDismissAlerts", true);
-			return new RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);*/
-			
+			/*
+			 * DesiredCapabilities capabilities = new DesiredCapabilities();
+			 * capabilities.setCapability("deviceName", "LocalAndroid");
+			 * capabilities.setCapability("platformName", "android");
+			 * capabilities.setCapability("browserName", "browser");
+			 * capabilities.setCapability("platformVersion", "ANY");
+			 * capabilities.setCapability("autoDismissAlerts", true); return new
+			 * RemoteWebDriver(new URL("http://127.0.0.1:4723/wd/hub"),
+			 * capabilities);
+			 */
+
 			DesiredCapabilities caps = new DesiredCapabilities();
 			caps.setCapability(MobileCapabilityType.PLATFORM_NAME, platformName);
 			caps.setCapability(MobileCapabilityType.DEVICE_NAME, deviceName);
@@ -529,19 +544,18 @@ public class WebDriverLoader {
 			caps.setCapability("unicodeKeyboard", true);
 			caps.setCapability("resetKeyboard", true);
 
-			
-			
 			// Package name
-			File f = new File(appPath);	
-			caps.setCapability(MobileCapabilityType.APP,f.getAbsolutePath());
+			File f = new File(appPath);
+			caps.setCapability(MobileCapabilityType.APP, f.getAbsolutePath());
 			caps.setCapability("appPackage", appPackage);
 
 			// App activity of the Application
 			caps.setCapability("appActivity", appActivity);
 			caps.setCapability("appWaitActivity", appWaitActivity);
-				
-			return new AppiumDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
-			
+
+			return new AppiumDriver<WebElement>(new URL(
+					"http://127.0.0.1:4723/wd/hub"), caps);
+
 		} catch (Exception e) {
 			e.getStackTrace();
 			throw new IllegalArgumentException("The expected URl is http://127.0.0.1:4723/wd/hub");
@@ -576,7 +590,8 @@ public class WebDriverLoader {
 
 			if (components.length > 1) {
 				String browserComponent = components[1];
-				String browserName = ("internetexplorer".equals(browserComponent)) ? "internet explorer"
+				String browserName = ("internetexplorer"
+						.equals(browserComponent)) ? "internet explorer"
 						: browserComponent;
 
 				desiredCapabilities.put("browserName", browserName);

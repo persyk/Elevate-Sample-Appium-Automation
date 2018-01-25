@@ -26,7 +26,7 @@ public abstract class Loader {
 	protected abstract void applyProperties(Properties paramProperties);
 
 	protected ArrayList<String> getPropertyFileList() {
-		ArrayList<String> propFileList = new ArrayList<String>();		
+		ArrayList<String> propFileList = new ArrayList<String>();
 		propFileList.add(new File("src/resources/dataFile.properties").getAbsolutePath());
 		return propFileList;
 	}

@@ -15,6 +15,7 @@ public class LocatorsPage {
 	public String passwordloginScreenTitle;
 	public String loginPassword;
 	public String loginButton;
+	public String incorrectFormatPasswordMessage;
 
 	/** Onboarding Screen **/
 	public String notificationOnboardingScreenTitle;
@@ -32,5 +33,11 @@ public class LocatorsPage {
 	public String welcomeMessage;
 	public String hamburgerIcon;
 	public String serviceTitle;
-
+	
+	/** Menu Screen **/
+	public String settingsOption;
+	
+	/** Setting screen **/
+	public String settingsTitle;
+	public String logoutButton;
 }

@@ -6,8 +6,8 @@ public class AndroidLocatorsPage extends LocatorsPage {
 
 		super.alertTitle = "alertTitle";
 		super.alertMessage = "message";
-		super.headerTitle = "navigationTitle";	
-		
+		super.headerTitle = "navigationTitle";
+
 		/** Login Screen **/
 		super.emailloginScreenTitle = "welcomeTitle";
 		super.loginEmail = "inputUserEmail";
@@ -15,6 +15,7 @@ public class AndroidLocatorsPage extends LocatorsPage {
 		super.passwordloginScreenTitle = "welcomeTitle";
 		super.loginPassword = "inputPassword";
 		super.loginButton = "logInButton";
+		super.incorrectFormatPasswordMessage = "passwordIncorrectMessage";
 
 		/** Onboarding Screen **/
 		super.onboarding_notNowButton = "notNowButton";
@@ -28,6 +29,13 @@ public class AndroidLocatorsPage extends LocatorsPage {
 		super.welcomeMessage = "feedContentView";
 		super.hamburgerIcon = "openDrawerBtn";
 		super.serviceTitle = "service_title";
+		
+		/** Menu Screen **/
+		super.settingsOption = "settingsBtn";
+		
+		/** Settings Screen **/
+		super.settingsTitle = "//android.widget.TextView[contains(@text,'settings')]";
+		super.logoutButton = "optionLogout";
 
 	}
 }

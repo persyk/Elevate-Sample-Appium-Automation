@@ -15,16 +15,17 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 
+import com.elevate.desired_capabilities.AndroidCapabilitiesPage;
+import com.elevate.desired_capabilities.DesiredCapabilitiesPage;
+import com.elevate.desired_capabilities.IOSCapabilitiesPage;
 import com.elevate.driver.utils.Loader;
 
 public class BaseDriver extends Loader {
 
 	public WebDriver driver;
 	private String siteURL;
-	private String newWebProjectUrl;
-	private String newMobileProjectUrl;
 	private String webdriver;
 	private String userName;
 	private String userPassword;
@@ -34,37 +35,43 @@ public class BaseDriver extends Loader {
 
 	private static final String CHAR_LIST = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	@BeforeClass
+	@BeforeMethod
 	public void setBaseDriver() {
 		setDriver(createDriver());
 	}
-	
+
 	/**
-	 * Method to load properties from properties file by initializing the getters and setters
+	 * Method to load properties from properties file by initializing the
+	 * getters and setters
 	 */
 	protected void applyProperties(Properties testProperties) {
 		setSiteURL(testProperties.getProperty("app.server.hostname"));
-		this.webdriver= "iphone";
+		this.webdriver = DesiredCapabilitiesPage.executeOnPlatform;
 		setUserName("elevatetest2k17@gmail.com");
 		setUserPassword("7654321And");
-		//this.webdriver = testProperties.getProperty("webdriver");
-		//setUserName(testProperties.getProperty("UserName"));
-		//setUserPassword(testProperties.getProperty("Password"));
 		setNewPassword(testProperties.getProperty("NewPassword"));
 		setUserIncorrectEmail(testProperties.getProperty("userIncorrectEmail"));
 	}
 
+	public <Any> Any getDesiredCapabilitiesPage() {
+		if (webdriver.equalsIgnoreCase("Android")) {
+			return (Any) new AndroidCapabilitiesPage();
+		} else {
+			return (Any) new IOSCapabilitiesPage();
+		}
+	}
 
-	
 	public File takeScreenshot(String methodName, WebDriver driver) {
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat formater = new SimpleDateFormat("dd_MM_yyyy_hh_mm_ss");
-		File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		File scrFile = ((TakesScreenshot) driver)
+				.getScreenshotAs(OutputType.FILE);
 		try {
-			String reportDirectory = System.getProperty("user.dir") + "/target/surefire-reports/";
+			String reportDirectory = System.getProperty("user.dir")
+					+ "/target/surefire-reports/";
 
-			File destFile = new File((String) reportDirectory + "/screenshots/" + methodName + "_"
-					+ formater.format(calendar.getTime()) + ".jpeg");
+			File destFile = new File((String) reportDirectory + "/screenshots/" + methodName + "_" + formater.format(calendar.getTime())
+					+ ".jpeg");
 			FileUtils.copyFile(scrFile, destFile);
 			return destFile;
 		} catch (IOException e) {
@@ -75,6 +82,7 @@ public class BaseDriver extends Loader {
 
 	/**
 	 * Base Url setters
+	 * 
 	 * @param siteURL
 	 */
 	protected void setSiteURL(String siteURL) {
@@ -88,25 +96,25 @@ public class BaseDriver extends Loader {
 	public String getUserName() {
 		return userName;
 	}
-	
-	protected void setUserIncorrectEmail(String userIncorrectEmail){
+
+	protected void setUserIncorrectEmail(String userIncorrectEmail) {
 		this.userIncorrectEmail = userIncorrectEmail;
-		
+
 	}
-	
-	public String getUserIncorrectEmail(){
+
+	public String getUserIncorrectEmail() {
 		return userIncorrectEmail;
-		
+
 	}
-	
-	protected void setUserIncorrectPassword(String userIncorrectPassword){
+
+	protected void setUserIncorrectPassword(String userIncorrectPassword) {
 		this.userIncorrectPassword = userIncorrectPassword;
-		
+
 	}
-	
-	public String getUserIncorrectPassword(){
+
+	public String getUserIncorrectPassword() {
 		return userIncorrectPassword;
-		
+
 	}
 
 	protected void setUserPassword(String userPassword) {
@@ -181,4 +189,5 @@ public class BaseDriver extends Loader {
 			return randomInt - 1;
 		}
 	}
+
 }
