@@ -21,6 +21,6 @@ public class DesiredCapabilitiesPage {
 	 * Set value to 'ios' to run tests on iOS app
 	 * Set value to 'android' to run tests on Android app
 	 **/
-	public static String executeOnPlatform = "ios";
+	public static String executeOnPlatform = "android";
 
 }

@@ -36,6 +36,22 @@ public class AndroidLocatorsPage extends LocatorsPage {
 		/** Settings Screen **/
 		super.settingsTitle = "//android.widget.TextView[contains(@text,'settings')]";
 		super.logoutButton = "optionLogout";
-
+		
+		/** Cafe Screen **/
+        super.cafeTitle = "//android.widget.TextView[contains(@text,'Food & Drink')]";
+        super.orderConfirmedMessage = "titleView";
+        
+        /** Cafe Menu Screen **/
+        super.navigationBar = "navigationBar";
+        
+        /** Cafe Details Screen **/
+        super.detailsTitle =  "//android.widget.TextView[@text='Details']";
+        super.addToCartButton = "addToCart";
+        
+        /** Cafe Checkout Screen **/
+        super.cartTitle = "//android.widget.TextView[@text='Cart']";
+        super.placeOrderButton = "submitOrderBtn";
+        
+        
 	}
 }

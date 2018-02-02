@@ -108,7 +108,7 @@ public class BaseAppPage extends BasePage {
 		loginPage.isLoginButtonEnabled();
 		//loginPage.clickOnLoginButtonOnPasswordScreen();		
 		//loginPage.isLoginButtonEnabled();
-		loginPage.clickOnLoginButtonOnPasswordScreen();		
+		//loginPage.clickOnLoginButtonOnPasswordScreen();		
 	}
 
 	public <Any> Any getLocatorsPage() {

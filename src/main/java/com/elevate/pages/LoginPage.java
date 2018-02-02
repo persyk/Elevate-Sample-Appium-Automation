@@ -48,7 +48,8 @@ public class LoginPage extends BaseAppPage {
 		this.passwordloginScreenTitle = locatorPage.passwordloginScreenTitle;
 		this.loginPassword = locatorPage.loginPassword;
 		this.loginButton = locatorPage.loginButton;
-		this.incorrectFormatPasswordMessage = locatorPage.incorrectFormatPasswordMessage;
+	    this.incorrectFormatPasswordMessage = locatorPage.incorrectFormatPasswordMessage;
+
 	}
 
 	/**
@@ -68,7 +69,7 @@ public class LoginPage extends BaseAppPage {
 
 	public void enterEmailAddress(String email) {
 		findElementById(loginEmail).click();
-		findElementById(loginEmail).clear();	
+        findElementById(loginEmail).clear();
 		findElementById(loginEmail).sendKeys(email);
 	}
 
@@ -83,6 +84,7 @@ public class LoginPage extends BaseAppPage {
 
 	public void enterPassword(String password) {
 		findElementById(loginPassword).click();
+		findElementById(loginPassword).clear();		
 		findElementById(loginPassword).sendKeys(password);
 	}
 

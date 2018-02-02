@@ -28,16 +28,33 @@ public class LocatorsPage {
 	public String permissionsTitleTextlabel;
 	public String alertPopup;
 	public String cancelButton;
+	
+	/** Menu screen **/
+	public String settingsOption;
+		
+	/** Settings screen **/
+	public String settingsTitle;
+	public String logoutButton;
 
 	/** Home screen **/
 	public String welcomeMessage;
 	public String hamburgerIcon;
 	public String serviceTitle;
 	
-	/** Menu Screen **/
-	public String settingsOption;
+	/** Cafe Screen **/
+	public String cafeTitle;
+	public String orderConfirmedMessage;
 	
-	/** Setting screen **/
-	public String settingsTitle;
-	public String logoutButton;
+	/** Cafe Menu Screen **/
+	public String navigationBar;
+	
+	/** Cafe Details Screen **/
+	public String detailsTitle;
+	public String addToCartButton;
+	
+	/** Cafe Checkout Screen **/
+	public String cartTitle;
+	public String placeOrderButton;
+
+
 }

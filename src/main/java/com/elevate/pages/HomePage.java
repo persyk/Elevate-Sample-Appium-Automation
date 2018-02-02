@@ -4,8 +4,10 @@ package com.elevate.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import com.elevate.locators.LocatorsPage;
+import com.elevate.pages.cafe.CafePage;
 
 /**
  * @author QASource HomePage consists of all the methods related to home page
@@ -17,7 +19,7 @@ public class HomePage extends BaseAppPage {
 	private String welcomeMessage;
 	private String hamburgerIcon;
 	private String serviceTitle;
-
+	
 	public HomePage(WebDriver driver) {
 		super(driver);
 
@@ -44,4 +46,20 @@ public class HomePage extends BaseAppPage {
 		return new MenuPage(getDriver());
 	}
 
+	public CafePage clickOnServiceTitle(String serviceTitle) {
+		String service = "//android.widget.TextView[@text='"+serviceTitle+"']";
+		if (isElementPresent(By.xpath(service))) {
+			findElementByXpath(service).click();
+			return new CafePage(getDriver());				
+		}
+		else
+		{
+			int start_x = findElementByXpath("//android.widget.TextView[@text='RESERVE A ROOM']").getLocation().getX();
+			int start_y = findElementByXpath("//android.widget.TextView[@text='RESERVE A ROOM']").getLocation().getY();
+			swipe(start_x, start_y, 0, -1480);
+			findElementByXpath(service).click();
+		    return new CafePage(getDriver());
+		}
+	}
+	
 }
