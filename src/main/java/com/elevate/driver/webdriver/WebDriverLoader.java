@@ -177,6 +177,7 @@ public class WebDriverLoader extends BaseDriver {
 			caps.setCapability("xcodeSigningId", "iPhone Developer");
 			// caps.setCapability("waitForAppScript", "$.delay(1000);");
 			// caps.setCapability("autoDismissAlerts", true);
+			//caps.setCapability("noReset", true);
 
 			return new IOSDriver<WebElement>(new URL("http://127.0.0.1:4723/wd/hub"), caps);
 

@@ -21,6 +21,7 @@ public class CafeCheckoutPage extends BaseAppPage {
 		private String cartTitle;
 		private String placeOrderButton;
 		private String orderConfirmationMessage;
+		private String cardText;
 								
 	public CafeCheckoutPage(WebDriver driver) {
 		super(driver);
@@ -29,6 +30,7 @@ public class CafeCheckoutPage extends BaseAppPage {
 		this.cartTitle = locatorPage.cartTitle;
 		this.placeOrderButton = locatorPage.placeOrderButton;
 		this.orderConfirmationMessage = locatorPage.orderConfirmedMessage;
+		this.cardText = locatorPage.cardText;
 	}
 	
 	public Boolean isCartTitleDisplayed() {
@@ -36,7 +38,7 @@ public class CafeCheckoutPage extends BaseAppPage {
 	}
 	
 	public CafeOrderConfirmationPage clickOnPlaceOrderButton() {
-		waitForElement(findElementById("cardTextView"), "wait", 30);
+		waitForElement(By.id(cardText), "wait", 30);
 		findElementById(placeOrderButton).click();
 	    waitForElement(By.id(orderConfirmationMessage), "wait", 30);		
 		return new CafeOrderConfirmationPage(getDriver());

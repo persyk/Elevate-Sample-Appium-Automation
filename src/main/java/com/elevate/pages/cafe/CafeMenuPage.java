@@ -15,49 +15,53 @@ import com.elevate.pages.BaseAppPage;
 public class CafeMenuPage extends BaseAppPage {
 
 	// Element locators for Menu Page.
-		private String navigationBar;
+	private String menuPageTitle;
+	private String menuSubCategoryTitle;
 						
 	public CafeMenuPage(WebDriver driver) {
 		super(driver);
 		LocatorsPage locatorPage = getLocatorsPage();
 		
-		this.navigationBar = locatorPage.navigationBar;
-		
+		this.menuPageTitle = locatorPage.cafesOnCafeScreen;
+		this.menuSubCategoryTitle = locatorPage.menuSubCategory;
 	}	
 	
-	public Boolean isMenuCategoriesBarDisplayed() {
-		return isElementPresent(By.id(navigationBar));
-	}
-	
-	public void clickOnMenuCategory(String menuCategory, String menuCategory1) {		
-		String menu = "//android.widget.TextView[@text='"+menuCategory+"' or @text = '"+menuCategory1+"']";	
-		if (findElementByXpath("//android.widget.TextView[@text='"+menuCategory+"' or @text = '"+menuCategory1+"']").isSelected() == false) {
-			findElementByXpath(menu).click();
-		}			
-	}
-	
+	public Boolean isMenuPageTitleDisplayed(String cafeTitle) {		
+		return findElementById(menuPageTitle).getText().equalsIgnoreCase(cafeTitle);
+	}		
+		
 	public void clickOnMenuSubCategory(String menuSubCategory) {
-		String menu = "//android.widget.TextView[@text='"+menuSubCategory+"']";		
-		findElementByXpath(menu).click();		
+		String menu = "//android.widget.TextView[@text='"+menuSubCategory+"']";	
+		int start_x = findElementById(menuSubCategoryTitle).getLocation().getX();
+		int start_y = findElementById(menuSubCategoryTitle).getLocation().getY();
+		for(int i=0;i<10;i++) {
+		if(isElementPresent(By.xpath(menu))) {
+		findElementByXpath(menu).click();
+		break;
+		}
+		swipe(start_x, start_y, 0, -50);
+		}
 	}
 	
 	public CafeDetailsPage clickOnMenuSubItem(String menuItem) {
-		String menu = "//android.widget.TextView[@text='"+menuItem+"']";		
+		String menu = "//android.widget.TextView[@text='"+menuItem+"']";	
 		findElementByXpath(menu).click();
 		return new CafeDetailsPage(getDriver());
 	}
 	
 	public String getItemPrice(String menuItem) {
-	 return findElementByXpath("//android.widget.TextView[@text='"+menuItem+"']/following-sibling::android.widget.TextView[@resource-id='com.convene.elevate.beta:id/item_price']").getText();
+		int start_x = findElementById(menuSubCategoryTitle).getLocation().getX();
+		int start_y = findElementById(menuSubCategoryTitle).getLocation().getY();
+		for(int i=0;i<10;i++) {   
+			if(isElementPresent(By.xpath("//android.widget.TextView[@text='"+menuItem+"']/following-sibling::android.widget.TextView[contains(@resource-id,'itemPrice')]"))) {
+				break;
+			}
+			swipe(start_x, start_y, 0, -80);
+		}
+		return findElementByXpath("//android.widget.TextView[@text='"+menuItem+"']/following-sibling::android.widget.TextView[contains(@resource-id,'itemPrice')]").getText();
 	}
 	
-	public void selectAnItem(String menuSubCategory, String menuItem) {
-		clickOnMenuSubCategory(menuSubCategory);
-		clickOnMenuSubItem(menuItem);
-	}		
-	
-	public String navigateToMenuItem(String menuCategory, String menuCategory1, String menuSubCategory, String menuItem) {
-		clickOnMenuCategory(menuCategory, menuCategory1);
+	public String navigateToMenuItem(String menuSubCategory, String menuItem) {
 		clickOnMenuSubCategory(menuSubCategory);
 		return getItemPrice(menuItem);
 	}

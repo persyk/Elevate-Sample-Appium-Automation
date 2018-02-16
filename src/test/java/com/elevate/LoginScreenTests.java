@@ -29,7 +29,7 @@ public class LoginScreenTests extends BaseDriver {
 
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.clickOkOnApplePayPopUpIfVisible();
-		
+
 		// Verify email title displayed on Email Screen
 		Assert.assertEquals(LoginPage.EMAIL_TITLE_TEXT, loginPage.getEmailTitleDisplayedonLoginScreen());
 		loginPage.enterEmailAddress(getUserName());
@@ -52,56 +52,56 @@ public class LoginScreenTests extends BaseDriver {
 		getLogger().info("Successfully logged in application.");
 
 		// Logout from application.
-		 homePage.logOut();
-		 Assert.assertEquals(LoginPage.EMAIL_TITLE_TEXT,loginPage.getEmailTitleDisplayedonLoginScreen());
-		 getLogger().info("Successfully logged out from application.");
+		homePage.logOut();
+		Assert.assertEquals(LoginPage.EMAIL_TITLE_TEXT,loginPage.getEmailTitleDisplayedonLoginScreen());
+		getLogger().info("Successfully logged out from application.");
 	}
-	
-    @Test
+
+	@Test
 	public void verifyValidationForIncorrectPassword() {
 
 		LoginPage loginPage = new LoginPage(getDriver());
-		
+
 		// Provide login credentials.
 		loginPage.enterLoginCredentials(getUserName(), "Welcomestu1234");
 		loginPage.clickOnLoginButtonOnPasswordScreen();
-    	
-        //Verify Alert Popup message
-        Assert.assertTrue(loginPage.isAlertTitleDisplayed());
-        
-     // Verify Alert Popup message for incorrect password.
-        Assert.assertTrue(loginPage.isCorrectAlertMessageDisplayed(loginPage.expectedValidationMessageForIncorrectPassword()));
-        getLogger().info("Correct alert message displayed successfully.");
+
+		//Verify Alert Popup message
+		Assert.assertTrue(loginPage.isAlertTitleDisplayed());
+
+		// Verify Alert Popup message for incorrect password.
+		Assert.assertTrue(loginPage.isCorrectAlertMessageDisplayed(loginPage.expectedValidationMessageForIncorrectPassword()));
+		getLogger().info("Correct alert message displayed successfully.");
 	} 
 
 
-   @Test
+	@Test
 	public void verifyValidationForInvalidUser() {
 
 		LoginPage loginPage = new LoginPage(getDriver());
-		
+
 		// Enter login credentials
 		loginPage.enterLoginCredentials("hjhj@gg.com", getUserPassword());
 		loginPage.clickOnLoginButtonOnPasswordScreen();
 
 		// Verify Alert Popup is displayed.
 		Assert.assertTrue(loginPage.isAlertTitleDisplayed());
-		
+
 		// Verify Alert Popup message for invalid user
-        Assert.assertTrue(loginPage.isCorrectAlertMessageDisplayed(loginPage.expectedValidationMessageForIncorrectPassword()));       
-        getLogger().info("Correct alert message displayed successfully.");
+		Assert.assertTrue(loginPage.isCorrectAlertMessageDisplayed(loginPage.expectedValidationMessageForIncorrectPassword()));       
+		getLogger().info("Correct alert message displayed successfully.");
 	}    
-   
-   @Test
+
+	@Test
 	public void verifyValidationForIncorrectFormatPassword() {
 
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.enterLoginCredentials(getUserName(), "test");
 		loginPage.clickOnLoginButtonOnPasswordScreen();
-
+		
 		// Verify Hint shown for incorrect password format
 		Assert.assertEquals(LoginPage.HINT_MESSAGE_FOR_INCORRECT_PWD_FORMAT, loginPage.getPasswordHintMessage());
 		getLogger().info("Hint message displayed successfully for incorrect format password");
 	}
-   
+
 }

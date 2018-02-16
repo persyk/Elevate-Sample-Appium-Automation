@@ -1,6 +1,7 @@
 package com.elevate.pages.cafe;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
 
 import com.elevate.locators.LocatorsPage;
@@ -14,42 +15,48 @@ import com.elevate.pages.BaseAppPage;
 public class CafePage extends BaseAppPage {
 
 	// Element locators for Menu Page.
-	private String cafeTitle;
-	private String navigationBar;
-
-
+	private String cafePageTitle;
+	private String cafesOnCafeScreen;
+		
 	public CafePage(WebDriver driver) {
 		super(driver);
 		LocatorsPage locatorPage = getLocatorsPage();
 
-		this.cafeTitle = locatorPage.cafeTitle;
-		this.navigationBar = locatorPage.navigationBar;
-
+		this.cafePageTitle = locatorPage.cafePageTitle;
+		this.cafesOnCafeScreen = locatorPage.cafesOnCafeScreen;
 	}
 
-	public Boolean isCafeTitleDisplayed() {
-		return isElementPresent(By.xpath(cafeTitle));
+	public Boolean isCafePageTitleDisplayed() {
+		return isElementPresent(By.xpath(cafePageTitle));
 	}
 
 	public CafeMenuPage navigateToCafe(String cafeTitle, String cafeTitle2) {
-		/*Integer count = findElementsById("vendorTypeName").size();
-		System.out.println(count);
 		String cafe = "//android.widget.TextView[@text='"+cafeTitle+"' or @text = '"+cafeTitle2+"']";
-		int start_x = findElementByXpath("//android.widget.TextView[@text = 'CAFE1' or @text = 'Cafe1']").getLocation().getX();
-		int start_y = findElementByXpath("//android.widget.TextView[@text = 'CAFE1' or @text = 'Cafe1']").getLocation().getY();
-		swipe(start_x, start_y, 0, -200);
-		findElementByXpath(cafe).click();*/
-		int start_x = findElementById("vendorTypeName").getLocation().getX();
-		int start_y = findElementById("vendorTypeName").getLocation().getY();
-		
-		String cafe = "//android.widget.TextView[@text='"+cafeTitle+"' or @text = '"+cafeTitle2+"']";
-		for(int i=0;i<10;i++) {
-			if (isElementPresent(By.xpath(cafe))) {
-				findElementByXpath(cafe).click();
-				break;
+		if (isElementPresent(By.xpath(cafe))) {
+			findElementByXpath(cafe).click();
 			}
-			swipe(start_x, start_y, 0, -80);
-		}			
+		else {
+			getLogger().info("Scrolling screen as '" + cafe + "' is not visible on the screen");
+			int i = 1;
+			while (i < 10 && !isElementPresent(By.xpath(cafe))) {
+				Point coordinates = getCoordinatesOfLastElementOnScreen(By.id(cafesOnCafeScreen));
+				int start_x = coordinates.getX();
+				int start_y = coordinates.getY();
+				swipe(start_x, start_y, 0, -100);
+				i++;
+			}
+
+			int y = 1;
+			while (y < 3 && isElementPresent(By.xpath(cafe))) {
+				findElementByXpath(cafe).click();
+				y++;
+			}
+		}
 		return new CafeMenuPage(getDriver());
-	}	
+		
+	}
+		
+	
+	
+	
 }

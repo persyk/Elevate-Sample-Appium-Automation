@@ -28,7 +28,9 @@ public class AndroidLocatorsPage extends LocatorsPage {
 		/** Home Screen **/
 		super.welcomeMessage = "feedContentView";
 		super.hamburgerIcon = "openDrawerBtn";
-		super.serviceTitle = "service_title";
+		super.servicesOnHomeScreen = "//android.widget.TextView[contains(@resource-id,'serviceTitle')]";
+		super.serviceTitle_1 = servicesOnHomeScreen+"[contains(@text,'";
+		super.serviceTitle_2 = "')]";
 		
 		/** Menu Screen **/
 		super.settingsOption = "settingsBtn";
@@ -38,20 +40,45 @@ public class AndroidLocatorsPage extends LocatorsPage {
 		super.logoutButton = "optionLogout";
 		
 		/** Cafe Screen **/
-        super.cafeTitle = "//android.widget.TextView[contains(@text,'Food & Drink')]";
+        super.cafePageTitle = "//android.widget.TextView[contains(@text,'Food & Drink')]";
+        super.cafesOnCafeScreen = "vendorName";
         super.orderConfirmedMessage = "titleView";
         
         /** Cafe Menu Screen **/
-        super.navigationBar = "navigationBar";
+        super.menuSubCategory = "subcategoryName";
         
         /** Cafe Details Screen **/
         super.detailsTitle =  "//android.widget.TextView[@text='Details']";
-        super.addToCartButton = "addToCart";
+        super.addToCartButton = "updateCartButton";
         
         /** Cafe Checkout Screen **/
         super.cartTitle = "//android.widget.TextView[@text='Cart']";
         super.placeOrderButton = "submitOrderBtn";
+        super.cardText = "cardTextView";
         
-        
+        /** Reserve Room Screen **/
+    	super.reserveRoomPageTitle = "//android.widget.TextView[@text='Book a Room']";
+    	super.viewRoomsButton = "viewRoomBtn";
+    	super.dateButton = "dateBtn";
+    	super.attendeesCount = "attendeesCount";
+    	super.calendarIcon = "calendarIconBtn";
+    	
+    	/** View Rooms Screen **/
+    	super.roomNameTitle = "roomName";
+    	
+    	/** RoomDetails Screen **/
+    	super.roomDetailsPageTitle = "spaceName";
+    	super.timeSlot = "timePeriod";
+    	super.reserveNowButton = "reserveButton";
+    	
+    	/** RoomBookingConfirmation Screen **/
+    	super.roomBookingConfirmationTitle = "//android.widget.TextView[@text='Your Booking Is Confirmed']";
+    	super.reserveConfirmationDoneButton = "reserveDoneButton";
+    	
+    	/** Upcoming Bookings Screen **/
+    	super.upcomingBookingsScreenTitle = "//android.widget.TextView[@text='Upcoming Bookings']";
+    	super.bookingsDateTitle = "bookingDate";
+    	super.bookingsCancelButton = "swipeCancel";
+
 	}
 }

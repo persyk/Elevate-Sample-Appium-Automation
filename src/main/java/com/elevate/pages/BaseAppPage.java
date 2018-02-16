@@ -2,10 +2,13 @@ package com.elevate.pages;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -15,6 +18,7 @@ import com.elevate.driver.utils.PropertyLoader;
 import com.elevate.locators.AndroidLocatorsPage;
 import com.elevate.locators.IOSLocatorsPage;
 import com.elevate.locators.LocatorsPage;
+import com.google.common.collect.Iterables;
 
 /**
  * BaseThisLifeSignedInPage provides a convenient extension point for
@@ -102,13 +106,9 @@ public class BaseAppPage extends BasePage {
 		LoginPage loginPage = new LoginPage(getDriver());
 		loginPage.clickOkOnApplePayPopUpIfVisible();
 		loginPage.enterEmailAddress(email);
-		//loginPage.isEmailScreenNextButtonEnabled();
 		loginPage.clickOnEmailScreenNextButton();
 		loginPage.enterPassword(password);
-		loginPage.isLoginButtonEnabled();
-		//loginPage.clickOnLoginButtonOnPasswordScreen();		
-		//loginPage.isLoginButtonEnabled();
-		//loginPage.clickOnLoginButtonOnPasswordScreen();		
+		loginPage.clickOnLoginButtonOnPasswordScreen();		
 	}
 
 	public <Any> Any getLocatorsPage() {
@@ -117,6 +117,13 @@ public class BaseAppPage extends BasePage {
 		} else {
 			return (Any) new IOSLocatorsPage();
 		}
+	}
+
+	public Point getCoordinatesOfLastElementOnScreen(By locator){
+		List<WebElement> elementsVisibleOnScreen = driver.findElements(locator);
+		WebElement lastElement = Iterables.getLast(elementsVisibleOnScreen);
+		System.out.println("last service present on screen -"+ lastElement.getText());				
+		return lastElement.getLocation();
 	}
 
 }

@@ -4,7 +4,7 @@ public class IOSCapabilitiesPage extends DesiredCapabilitiesPage {
 
 	public IOSCapabilitiesPage() {
 
-		super.appPath = "src/resources/iOS_ipaFile/Elevate_Testing_#14.ipa";
+		super.appPath = "src/resources/iOS_ipaFile/Elevate_Testing_#16.ipa";
 		super.bundleId = "com.convene.Elevate.dev";
 		super.appActivity = "com.convene.elevate.modules.splash.SplashScreenActivity";
 		super.appWaitActivity = "com.convene.elevate.modules.splash.SplashScreenActivity";

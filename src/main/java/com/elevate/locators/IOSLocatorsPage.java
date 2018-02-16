@@ -30,12 +30,23 @@ public class IOSLocatorsPage extends LocatorsPage {
 		/** Home Screen **/
 		super.welcomeMessage = "//XCUIElementTypeStaticText[contains(@name,'WELCOME')]"; // Xpath
 		super.hamburgerIcon = "menu";
-		super.serviceTitle = "";
+		super.servicesOnHomeScreen = "//XCUIElementTypeStaticText[contains(@name,'ServiceTitle')]";
+		super.serviceTitle_1 = servicesOnHomeScreen+"[contains(@value,'";
+		super.serviceTitle_2 = "')]";
 
 		/** Menu Screen **/		
 		super.settingsOption= "Settings";
 		
-		/** Home Screen **/
+		/** Settings Screen **/
 		super.logoutButton = "optionLogout";
+		
+		/** Cafe Screen **/
+        super.cafePageTitle = "//XCUIElementTypeNavigationBar[@name='Food & Drink']";
+        super.cafesOnCafeScreen = "";
+        super.orderConfirmedMessage = "";
+		
+		
+		
+		
 	}
 }
