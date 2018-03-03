@@ -46,7 +46,7 @@ public class BaseDriver extends Loader {
 	 */
 	protected void applyProperties(Properties testProperties) {
 		setSiteURL(testProperties.getProperty("app.server.hostname"));
-		this.webdriver = DesiredCapabilitiesPage.executeOnPlatform;
+		this.webdriver = DesiredCapabilitiesPage.platformSelector();
 		//setUserName("mcaltonqa+tapa@gmail.com");
 		setUserName("jcaltonqa+dev+17jan@gmail.com");  //jcaltonqa+dev+17jan@gmail.com
 		setUserPassword("Welcome1234");

@@ -2,6 +2,7 @@ package com.elevate.desired_capabilities;
 
 public class DesiredCapabilitiesPage {
 
+	private static String mavenProperty;
 	public String appPath;
 	public String deviceName;
 	public String platformVersion;
@@ -20,7 +21,20 @@ public class DesiredCapabilitiesPage {
 	/**
 	 * Set value to 'ios' to run tests on iOS app
 	 * Set value to 'android' to run tests on Android app
+	 * Execute mvn test -Denv=android to run tests on Android or mvn test -Denv=ios to run tests on iOS
 	 **/
-	public static String executeOnPlatform = "android";
+	public static String executeOnPlatform;
+
+
+	public static String platformSelector(){
+		mavenProperty = System.getProperty("env");
+		if (mavenProperty == null)
+			executeOnPlatform = "android";
+		else if (mavenProperty.equals("ios"))
+			executeOnPlatform = "ios";
+		else if (mavenProperty.equals("android"))
+			executeOnPlatform = "android";
+		return executeOnPlatform;
+	}
 
 }
