@@ -21,13 +21,13 @@ public class DesiredCapabilitiesPage {
 	/**
 	 * Set value to 'ios' to run tests on iOS app
 	 * Set value to 'android' to run tests on Android app
-	 * Execute mvn test -Denv=android to run tests on Android or mvn test -Denv=ios to run tests on iOS
+	 * Execute mvn test -Dplatform=android to run tests on Android or mvn test -Dplatform=ios to run tests on iOS
 	 **/
 	public static String executeOnPlatform;
 
 
 	public static String platformSelector(){
-		mavenProperty = System.getProperty("env");
+		mavenProperty = System.getProperty("platform");
 		if (mavenProperty == null)
 			executeOnPlatform = "android";
 		else if (mavenProperty.equals("ios"))

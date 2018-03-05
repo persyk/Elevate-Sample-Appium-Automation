@@ -74,6 +74,9 @@
 				<version>2.20</version>
 				<configuration>
 					<properties>
+                        <systemPropertyVariables>
+                            <platform>${platform}</platform>
+                        </systemPropertyVariables>
 						<property>
 							<name>usedefaultlisteners</name>
 							<value>true</value> <!-- disabling default listeners is optional -->
